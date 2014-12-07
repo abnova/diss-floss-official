@@ -1,0 +1,95 @@
+---
+title: "CFA Report"
+author: "Aleksandr Blekh"
+output:
+  pdf_document:
+    highlight: kate
+    includes:
+      in_header: ~/diss-floss/config/diss-floss.sty
+    keep_tex: yes
+    number_sections: yes
+    toc: yes
+    toc_depth: 3
+  md_document:
+    toc: yes
+    toc_depth: 3
+  html_document:
+    css: ~/diss-floss/config/knitr/markdown.css
+    number_sections: yes
+    theme: united
+    toc: yes
+  word_document:
+    fig_width: 6.5
+---
+
+The following report is dynamically generated and presents results of exploratory data analysis (EDA) for prepared (transformed) research data, located in directories under "data/transform".
+
+This EDA consists of performing both descriptive and visual exploratory analysis for single variables (univariate), as well as for relationships between variables (multivariate).
+
+```{r KnitrSetup, child='../config/knitr/knitr-setup-global.Rmd'}
+# empty
+```
+
+```{r ReadChunksEDA}
+read_chunk('cfa.R')
+```
+
+```{r CleanEnv}
+# empty
+```
+
+```{r ConfigReport}
+outFmt <- opts_knit$get('out.format')
+param1 <- TRUE
+param2 <- FALSE
+param3 <- 'TEST'
+```
+
+```{r LoadPackages}
+# empty
+```
+
+```{r PrepareCFA}
+# empty
+```
+
+```{r PerformCFA, cache=TRUE}
+# empty
+```
+
+The SourceForge pilot data set consists of `r ncol(readRDS(file.path(READY4CFA_DIR, "flossData.rds")))` indicators. The following is the summary descriptive statistics of the data set.
+
+```{r cfaReportSummary, include=TRUE, background='grey90', output.lines=1:120}
+summary(cfaFit_flossData, fit.measures = TRUE, standardize = TRUE)
+```
+
+Let's see how equations work:
+
+$$ \sum_{i=1}^{n} \{ y_{i} - \hat{\mu}_{i} \}^2 $$
+
+Another one:
+
+$$ \sum_{i=1}^{n} \{ y_{i} - \hat{\mu}_{i} \}^2 $$
+
+And now let's see what output would be produced by 'tables' package, as shown in Table \ref{cfaResultsTable}:
+
+```{r cfaReportSummary3, include=TRUE, results='asis', fig.cap='CFA Results Summary'}
+#if (outFmt == 'word_document') fileType <- 'msword'
+#genCFAresultsTable(label = "cfaResultsTable", type = fileType)
+genCFAresultsTable(label = "cfaResultsTable")
+```
+
+Results of CFA in a form of a model diagram are presented in Figure \ref{fig:cfaModelDiagram}:
+
+```{r cfaModelFigure, include=FALSE, results='asis', fig.cap='CFA Model', fig.height=4, fig.width=4}
+# DO NOT ADD fig.align='center' option before the issue #626 is not fixed (tentative fix revision: knitr 1.8)
+genCFAmodelDiagram(cfaFit_flossData, latex = TRUE, caption = "CFA model diagram", label = "cfaModelDiagram")
+```
+
+\begin{figure}
+  \centering
+  % \scalebox{1.0}[1.25]{\input{cfaModDiag.tex}}
+  \input{cfaModDiag.tex}
+  \caption{CFA model diagram}
+  \label{fig:cfaModelDiagram}
+\end{figure}

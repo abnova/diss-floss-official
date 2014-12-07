@@ -1,0 +1,9 @@
+*.svg
+*.pdf
+*.docx
+*.tex
+*.gz
+figures
+knitr-cache
+*-tikzDictionary
+*_files

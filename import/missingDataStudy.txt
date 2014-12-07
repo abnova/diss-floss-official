@@ -1,0 +1,315 @@
+*) Find categories of a project with a specific ID (15000)
+
+SELECT tgl.*, tc.fullname FROM sf0514.trove_group_link tgl, sf0514.trove_cat tc WHERE tgl.group_id = 15000 AND tgl.trove_cat_id = tc.trove_cat_id
+
+19422888:3:0:15000:1:3:Developers:
+19422890:5:0:15000:1:3:Other Audience:
+19422892:235:0:15000:199:3:OS Independent (Written in an interpreted language):
+19422894:83:0:15000:18:3:Turn Based Strategy:
+19422896:229:0:15000:225:3:X Window System (X11):
+19422898:237:0:15000:225:3:Web-based:
+19422887:8:0:15000:6:3:2 - Pre-Alpha:
+19422889:2:0:15000:1:3:End Users/Desktop:
+19422891:187:0:15000:13:3:BSD License:
+19422893:198:0:15000:160:3:Java:
+19422895:275:0:15000:274:3:English:
+19422897:230:0:15000:225:3:Win32 (MS Windows):
+
+-----
+
+*) Same, but limit info to license ('root_parent = 13')
+
+SELECT tgl.*, tc.fullname FROM sf0514.trove_group_link tgl, sf0514.trove_cat tc WHERE tgl.group_id = 15000 AND tgl.trove_cat_id = tc.trove_cat_id AND tc.root_parent = 13
+
+19422891:187:0:15000:13:3:BSD License:
+
+-----
+
+*) Proof that we should rely on 'trove_group_link' table for collecting license data, as it contains lots of data on that, while 'groups' table has 90% missing data (for this particular example - Project ID range 300K-350K, 'groups' has 100% missing data, while 'trove_group_link'...)
+
+SELECT tgl.*, tc.fullname FROM sf0514.trove_group_link tgl, sf0514.trove_cat tc WHERE tgl.group_id   > 300000 AND tgl.group_id < 350000 AND tgl.trove_cat_id = tc.trove_cat_id AND tc.root_parent = 13
+
+23158194:15:0:303060:13:3:GNU General Public License version 2.0 (GPLv2):
+21462970:679:0:304404:13:3:GNU General Public License version 3.0 (GPLv3):
+24996493:187:0:323679:13:3:BSD License:
+24840903:15:0:310061:13:3:GNU General Public License version 2.0 (GPLv2):
+22570547:296:0:307478:13:3:Apache Software License:
+21535234:324:0:333745:13:3:Academic Free License (AFL):
+23042981:15:0:328715:13:3:GNU General Public License version 2.0 (GPLv2):
+24204770:680:0:324992:13:3:GNU Library or Lesser General Public License version 3.0 (LGPLv3):
+24744863:187:0:334954:13:3:BSD License:
+24536189:188:0:348018:13:3:MIT License:
+21402265:870:0:310286:13:3:Creative Commons Attribution ShareAlike License V3.0:
+21261512:679:0:333217:13:3:GNU General Public License version 3.0 (GPLv3):
+24205422:15:0:328392:13:3:GNU General Public License version 2.0 (GPLv2):
+21719774:680:0:323422:13:3:GNU Library or Lesser General Public License version 3.0 (LGPLv3):
+27640729:15:0:300309:13:3:GNU General Public License version 2.0 (GPLv2):
+24996462:679:0:330150:13:3:GNU General Public License version 3.0 (GPLv3):
+17396931:188:0:330367:13:3:MIT License:
+24766331:196:0:309841:13:3:Other License:
+24625746:679:0:308075:13:3:GNU General Public License version 3.0 (GPLv3):
+23284374:196:0:336632:13:3:Other License:
+21371213:15:0:337548:13:3:GNU General Public License version 2.0 (GPLv2):
+24204817:16:0:333214:13:3:GNU Library or Lesser General Public License version 2.0 (LGPLv2):
+26440218:401:0:331448:13:3:Apache License V2.0:
+21055428:15:0:302789:13:3:GNU General Public License version 2.0 (GPLv2):
+23138107:15:0:324620:13:3:GNU General Public License version 2.0 (GPLv2):
+21404998:197:0:303556:13:3:Public Domain:
+24204818:680:0:333214:13:3:GNU Library or Lesser General Public License version 3.0 (LGPLv3):
+
+-----
+
+*) Get also the parent category (in this case, license type category [OSI, other])
+
+SELECT tgl.*, tc.fullname, tc.parent, tc2.fullname FROM sf0514.trove_group_link tgl, sf0514.trove_cat tc, sf0514.trove_cat tc2 WHERE tgl.group_id   > 300000 AND tgl.group_id < 350000 AND tgl.trove_cat_id = tc.trove_cat_id AND tc.parent = tc2.trove_cat_id AND tc.root_parent = 13
+
+23158194:15:0:303060:13:3:GNU General Public License version 2.0 (GPLv2):14:OSI-Approved Open Source:
+21462970:679:0:304404:13:3:GNU General Public License version 3.0 (GPLv3):14:OSI-Approved Open Source:
+24996493:187:0:323679:13:3:BSD License:14:OSI-Approved Open Source:
+24840903:15:0:310061:13:3:GNU General Public License version 2.0 (GPLv2):14:OSI-Approved Open Source:
+22570547:296:0:307478:13:3:Apache Software License:14:OSI-Approved Open Source:
+21535234:324:0:333745:13:3:Academic Free License (AFL):14:OSI-Approved Open Source:
+23042981:15:0:328715:13:3:GNU General Public License version 2.0 (GPLv2):14:OSI-Approved Open Source:
+24204770:680:0:324992:13:3:GNU Library or Lesser General Public License version 3.0 (LGPLv3):14:OSI-Approved Open Source:
+24744863:187:0:334954:13:3:BSD License:14:OSI-Approved Open Source:
+24536189:188:0:348018:13:3:MIT License:14:OSI-Approved Open Source:
+21402265:870:0:310286:13:3:Creative Commons Attribution ShareAlike License V3.0:868:Creative Commons Attribution License:
+21261512:679:0:333217:13:3:GNU General Public License version 3.0 (GPLv3):14:OSI-Approved Open Source:
+24205422:15:0:328392:13:3:GNU General Public License version 2.0 (GPLv2):14:OSI-Approved Open Source:
+21719774:680:0:323422:13:3:GNU Library or Lesser General Public License version 3.0 (LGPLv3):14:OSI-Approved Open Source:
+27640729:15:0:300309:13:3:GNU General Public License version 2.0 (GPLv2):14:OSI-Approved Open Source:
+24996462:679:0:330150:13:3:GNU General Public License version 3.0 (GPLv3):14:OSI-Approved Open Source:
+17396931:188:0:330367:13:3:MIT License:14:OSI-Approved Open Source:
+24766331:196:0:309841:13:3:Other License:13:License:
+
+-----
+
+*) Retrieve just Project ID and license information
+
+SELECT tgl.group_id, tc.fullname, tc2.fullname FROM sf0514.trove_group_link tgl, sf0514.trove_cat tc, sf0514.trove_cat tc2 WHERE tgl.group_id   > 300000 AND tgl.group_id < 350000 AND tgl.trove_cat_id = tc.trove_cat_id AND tc.parent = tc2.trove_cat_id AND tc.root_parent = 13
+
+303060:GNU General Public License version 2.0 (GPLv2):OSI-Approved Open Source:
+304404:GNU General Public License version 3.0 (GPLv3):OSI-Approved Open Source:
+323679:BSD License:OSI-Approved Open Source:
+310061:GNU General Public License version 2.0 (GPLv2):OSI-Approved Open Source:
+307478:Apache Software License:OSI-Approved Open Source:
+333745:Academic Free License (AFL):OSI-Approved Open Source:
+328715:GNU General Public License version 2.0 (GPLv2):OSI-Approved Open Source:
+324992:GNU Library or Lesser General Public License version 3.0 (LGPLv3):OSI-Approved Open Source:
+334954:BSD License:OSI-Approved Open Source:
+348018:MIT License:OSI-Approved Open Source:
+310286:Creative Commons Attribution ShareAlike License V3.0:Creative Commons Attribution License:
+333217:GNU General Public License version 3.0 (GPLv3):OSI-Approved Open Source:
+328392:GNU General Public License version 2.0 (GPLv2):OSI-Approved Open Source:
+323422:GNU Library or Lesser General Public License version 3.0 (LGPLv3):OSI-Approved Open Source:
+300309:GNU General Public License version 2.0 (GPLv2):OSI-Approved Open Source:
+330150:GNU General Public License version 3.0 (GPLv3):OSI-Approved Open Source:
+330367:MIT License:OSI-Approved Open Source:
+309841:Other License:License:
+308075:GNU General Public License version 3.0 (GPLv3):OSI-Approved Open Source:
+336632:Other License:License:
+
+-----
+
+*) List of all SRDA licenses (without license categories):
+
+SELECT shortname FROM sf0514.trove_cat WHERE parent <> 13 AND root_parent = 13
+
+php-license:
+zope:
+eiffel2:
+miroslicense:
+ibm:
+w3c:
+multicslicense:
+catosl:
+sleepycat:
+ipafontlicense:
+fair:
+isclicense:
+classpath:
+artisticv2:
+zlib:
+boostlicense:
+cddl:
+ccanclv2:
+ccaslv2:
+ccaslv3:
+mpl20:
+mit:
+cvw:
+ms-rl:
+ntplicense:
+bsd:
+plan9:
+mpl:
+attribut:
+iosl:
+entessa:
+wxwindows:
+sybase:
+artistic:
+rscpl:
+psfl:
+afl:
+vovida:
+jabber:
+opengroup:
+eclipselicense:
+nasalicense:
+oclc:
+qpl:
+sunpublic:
+eiffel:
+nokia:
+apache:
+python:
+rpl15:
+osl:
+frameworx:
+agpl:
+apache2:
+openfontlicense11:
+nethack:
+ibmcpl:
+nposl3:
+cua:
+lgplv3:
+latexppl:
+lgpl:
+eupublicense:
+sissl:
+cpal:
+motosoto:
+ms-pl:
+mpl11:
+apsl:
+splicense2:
+gplv3:
+ncsa:
+xnet:
+nausite:
+educom:
+adaptive:
+datagrid:
+public102:
+historical:
+real:
+rpl:
+gpl:
+
+-----
+
+*) Same, with full license names:
+
+SELECT shortname, fullname FROM sf0514.trove_cat WHERE parent <> 13 AND root_parent = 13
+
+php-license:PHP License:
+zope:Zope Public License:
+eiffel2:Eiffel Forum License V2.0:
+miroslicense:MirOS License:
+ibm:IBM Public License:
+w3c:W3C License:
+multicslicense:Multics License:
+catosl:Computer Associates Trusted Open Source License 1.1:
+sleepycat:Sleepycat License:
+ipafontlicense:IPA Font License:
+fair:Fair License:
+isclicense:ISC License:
+classpath:GNU General Public License with Classpath exception (Classpath::License):
+artisticv2:Artistic License 2.0:
+zlib:zlib/libpng License:
+boostlicense:Boost Software License (BSL1.0):
+cddl:Common Development and Distribution License:
+ccanclv2:Creative Commons Attribution Non-Commercial License V2.0:
+ccaslv2:Creative Commons Attribution ShareAlike License V2.0:
+ccaslv3:Creative Commons Attribution ShareAlike License V3.0:
+mpl20:Mozilla Public License 2.0 (MPL 2.0):
+mit:MIT License:
+cvw:MITRE Collaborative Virtual Workspace License (CVW License):
+ms-rl:Microsoft Reciprocal License:
+ntplicense:NTP License:
+bsd:BSD License:
+plan9:Lucent Public License (Plan9):
+mpl:Mozilla Public License 1.0 (MPL):
+attribut:Attribution Assurance License:
+iosl:Intel Open Source License:
+entessa:Entessa Public License:
+wxwindows:wxWindows Library Licence:
+sybase:Sybase Open Watcom Public License:
+artistic:Artistic License:
+rscpl:Ricoh Source Code Public License:
+psfl:Python Software Foundation License:
+afl:Academic Free License (AFL):
+vovida:Vovida Software License 1.0:
+jabber:Jabber Open Source License:
+opengroup:Open Group Test Suite License:
+eclipselicense:Eclipse Public License:
+nasalicense:NASA Open Source Agreement:
+oclc:OCLC Research Public License 2.0:
+qpl:Qt Public License (QPL):
+sunpublic:Sun Public License:
+eiffel:Eiffel Forum License:
+nokia:Nokia Open Source License:
+apache:Apache Software License:
+python:Python License (CNRI Python License):
+rpl15:Reciprocal Public License 1.5 (RPL1.5):
+osl:Open Software License 3.0 (OSL3.0):
+frameworx:Frameworx Open License:
+agpl:Affero GNU Public License :
+apache2:Apache License V2.0:
+openfontlicense11:Open Font License 1.1 (OFL 1.1):
+nethack:Nethack General Public License:
+ibmcpl:Common Public License 1.0:
+nposl3:Non-Profit Open Software License 3.0 (Non-Profit OSL 3.0):
+cua:CUA Office Public License Version 1.0:
+lgplv3:GNU Library or Lesser General Public License version 3.0 (LGPLv3):
+latexppl:LaTeX Project Public License:
+lgpl:GNU Library or Lesser General Public License version 2.0 (LGPLv2):
+eupublicense:European Union Public License:
+sissl:Sun Industry Standards Source License (SISSL):
+cpal:Common Public Attribution License 1.0 (CPAL):
+motosoto:Motosoto License:
+ms-pl:Microsoft Public License:
+mpl11:Mozilla Public License 1.1 (MPL 1.1):
+apsl:Apple Public Source License:
+splicense2:Simple Public License 2.0:
+gplv3:GNU General Public License version 3.0 (GPLv3):
+ncsa:University of Illinois/NCSA Open Source License:
+xnet:X.Net License:
+nausite:Naumen Public License:
+educom:Educational Community License, Version 2.0:
+adaptive:Adaptive Public License:
+datagrid:EU DataGrid Software License:
+public102:Lucent Public License Version 1.02:
+historical:Historical Permission Notice and Disclaimer:
+real:RealNetworks Public Source License V1.0:
+rpl:Reciprocal Public License:
+gpl:GNU General Public License version 2.0 (GPLv2):
+
+-----
+
+*) Retrieve Project ID and Development Stage
+
+SELECT tgl.group_id, tc.shortname FROM sf0514.trove_group_link tgl, sf0514.trove_cat tc WHERE tgl.group_id   > 300000 AND tgl.group_id < 350000 AND tgl.trove_cat_id = tc.trove_cat_id AND tc.root_parent = 6
+
+303060:production:
+304404:production:
+323679:production:
+310061:beta:
+307478:mature:
+333745:production:
+328715:production:
+334954:planning:
+310286:production:
+330150:beta:
+333217:alpha:
+323849:prealpha:
+328392:production:
+306217:alpha:
+323422:prealpha:
+300309:mature:
+309841:alpha:
+343148:production:
+
+-----

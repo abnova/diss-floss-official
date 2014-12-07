@@ -1,0 +1,58 @@
+<!--- Global (project-wide) options for 'knitr' --->
+
+```{r KnitrPackageSetup, cache=FALSE, include=FALSE}
+# echo=FALSE
+
+if (!suppressMessages(require(knitr))) install.packages('knitr')
+library(knitr)
+
+PRJ_HOME <- Sys.getenv("DISS_FLOSS_HOME")
+
+source(file.path(PRJ_HOME, "config//diss-floss-config.R"))
+source(file.path(PRJ_HOME, "utils/graphics.R")) # golden ratio
+
+read_chunk(file.path(PRJ_HOME, "config/knitr/hooks/outputLines.R")) # hook
+
+opts_knit$set(root.dir = PRJ_HOME)
+opts_knit$set(progress = TRUE, verbose = TRUE)
+opts_knit$set(eval.after = "fig.cap")
+
+# attempt to set margins for EFA diagrams, but pref. to use 'qgraph' / mar()
+# B/L/T/R = 5.1 / 4.1 / 4.1 / 2.1
+#opts_knit$set(global.pars = par(mar=c(10, 10, 10, 7)))
+```
+
+
+```{r KnitrChunksSetup, cache=FALSE, include=FALSE, echo=FALSE, message=TRUE}
+
+opts_chunk$set(
+  eval = TRUE,
+  echo = FALSE,
+  #results='markup',
+  include = FALSE,
+  warning = FALSE,
+  error = TRUE,
+  message = TRUE,
+  tidy = FALSE,
+  comment = NA,
+  fig.width = PHI * opts_chunk$get("fig.height"),
+  dpi = myDPI,
+  #fig.align = 'center',
+  #out.width = '0.8\\textwidth',
+  #fig.path = 'figures/',
+  cache = FALSE,
+  cache.path = '~/diss-floss/knitr-cache/',
+  cache.extra = rand_seed
+)
+
+#options(markdown.HTML.stylesheet = "path/to/a/custom/style.css")
+
+#echoChunks <- FALSE
+#warningChunks<- FALSE
+#options(width = 120)  # so the output is 50% wider than the default
+```
+
+\definecolor{greyBackground}{rgb}{0.90, 0.90, 0.90}
+\definecolor{lightblue}{rgb}{0.94, 0.97, 1.0}
+
+\lstset{backgroundcolor=\color{greyBackground}}

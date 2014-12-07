@@ -1,0 +1,98 @@
+---
+title: "EFA Report"
+author: "Aleksandr Blekh"
+output:
+  pdf_document:
+    fig_caption: yes
+    fig_crop: no
+    highlight: kate
+    includes:
+      in_header: ~/diss-floss/config/diss-floss.sty
+    keep_tex: yes
+    number_sections: yes
+    toc: yes
+    toc_depth: 3
+  md_document:
+    toc: yes
+    toc_depth: 3
+  html_document:
+    css: ~/diss-floss/config/knitr/markdown.css
+    number_sections: yes
+    theme: united
+    toc: yes
+  word_document:
+    fig_width: 6.5
+---
+
+The following report is dynamically generated and presents results of exploratory data analysis (EDA) for prepared (transformed) research data, located in directories under "data/transform".
+
+This EDA consists of performing both descriptive and visual exploratory analysis for single variables (univariate), as well as for relationships between variables (multivariate).
+
+```{r KnitrSetup, child='../config/knitr/knitr-setup-global.Rmd'}
+# empty
+```
+
+```{r ReadChunksEDA}
+read_chunk('efa.R')
+```
+
+```{r CleanEnv}
+# empty
+```
+
+```{r ConfigReport}
+param1 <- TRUE
+param2 <- FALSE
+param3 <- 'TEST'
+```
+
+```{r LoadPackages}
+# empty
+```
+
+```{r PrepareEFA}
+# empty
+```
+
+```{r PerformEFA, cache=TRUE}
+# empty
+```
+
+```{r getRefInfo}
+#bcRefInfo <- genObjRefs("fig", "barchart_")
+#histRefInfo <- genObjRefs("fig", "histogram_")
+#mixpRefInfo <- genObjRefs("fig", "mixplot_")
+#pmatRefInfo <- genObjRefs("fig", "plotmatrix_")
+```
+
+The SourceForge pilot data set consists of `r ncol(readRDS(file.path(READY4EFA_DIR, "flossData.rds")))` indicators. The following is the summary descriptive statistics of the data set.
+
+```{r efaReportVssSummary, include=TRUE, results='markup'}
+summary(vssInfo_flossData)
+```
+
+And now let's take a look at the EFA results summary, presented in Table \ref{tab:efaResults}:
+
+```{r efaReportSummaryTable, include=TRUE, results='asis'}
+genEFAresultsTable(caption="EFA Results: Summary by rotation method", digits=2, numFactors=numFactors)
+```
+
+The factors scree plot, produced as part of EFA, is shown in Figure \ref{fig:efaResultsScreePlot}:
+
+```{r efaReportScreePlot, include=TRUE, fig.cap='EFA Results: Scree plot\\label{fig:efaResultsScreePlot}'}
+# DO NOT ADD fig.align='center' option before the issue #626 is not fixed (tentative fix revision: knitr 1.8) -- TODO: update when 1.8 will be released
+print(screePlot_flossData)
+```
+
+Results of EFA are visualized in a form of diagrams and are presented in Figure \ref{fig:efaResultsDiagram} below:
+
+`r diagLegend <- "DTS - Development Team Size; PrA - Project Age; LcR - License Restrictiveness; PrS - Project Size; SfT - Software Type"`
+
+```{r efaReportDiagram, include=TRUE, results='asis', fig.cap='EFA Results: Model diagram\\label{fig:efaResultsDiagram}', fig.show='hold'}
+genEFAresultsDiagram(efaModels, TRUE, latex = TRUE)
+```
+
+```{r efaResultsDiagramAppendix, include=FALSE, results='asis', fig.cap='EFA Results Diagrams (continued)', fig.show='hold', fig.height=3.5, fig.width=3.5}
+if (DO_APPENDIX)
+genEFAresultsDiagram(efaModels, latex = TRUE)
+```

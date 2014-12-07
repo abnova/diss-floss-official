@@ -1,0 +1,17 @@
+figures
+figure
+knitr-cache
+.Rproj.user
+.Rhistory
+*.RData
+*.Rdata
+*.rds
+*.Rout
+*.done
+*.bz2
+cookies.txt
+*.log
+*.md
+*.html
+*.png
+*.pdf

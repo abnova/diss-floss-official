@@ -1,0 +1,40 @@
+{
+   "_source":"FLOSSmole",
+   "_action":"import",
+   "_repoBaseDir":"http://flossdata.syr.edu/data",
+   "data":[
+      {
+         "ID":"1"
+         "indicatorName":"test1",
+         "indicatorDescription":"Test Indicator 1",
+         "indicatorType":"numeric",
+         "resultType":"numeric",
+         "requestSQL":"SELECT * FROM fcProjectsInfo WHERE user_id < 100"
+      },
+      {
+         "ID":"2"
+         "indicatorName":"test2",
+         "indicatorDescription":"Test Indicator 2",
+         "indicatorType":"numeric",
+         "resultType":"numeric",
+         "requestSQL":"SELECT * FROM fsfDeveloperProjects 
+                       WHERE user_id = 12345"
+      },
+      {
+         "ID":"3"
+         "indicatorName":"totalProjects",
+         "indicatorDescription":"Total number of unique projects",
+         "indicatorType":"numeric",
+         "resultType":"numeric",
+         "requestSQL":"SELECT COUNT(DISTINCT project_id) FROM projects"
+      },
+      {
+         "ID":"4"
+         "indicatorName":"totalDevs",
+         "indicatorDescription":"Total number of developers per project",
+         "indicatorType":"numeric",
+         "resultType":"data.frame",
+         "requestSQL":"SELECT COUNT(*) FROM developers WHERE project_id = 12345"
+      }
+   ]
+}
