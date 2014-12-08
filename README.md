@@ -11,7 +11,7 @@ Related information can be found in the repository's wiki at https://github.com/
 
 Please cite this software as follows:
 
-Blekh, A. (2014). Research software for quantitative analysis of open source software ecosystem using structural equation modeling. Version 1.0.1. [Software] Retrieved from https://github.com/abnova/diss-floss-official. doi:10.5281/zenodo.13143
+Blekh, A. (2014). Research software for quantitative analysis of open source software ecosystem using structural equation modeling. Version 1.0.2. [Software] Retrieved from https://github.com/abnova/diss-floss-official. doi:10.5281/zenodo.13143
 
 [![DOI](https://zenodo.org/badge/7586/abnova/diss-floss-official.svg)](http://dx.doi.org/10.5281/zenodo.13143)
 
